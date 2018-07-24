@@ -1,5 +1,4 @@
-MIT License
-
+/*
 Copyright (c) 2018 Simon Schmidt
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,3 +18,34 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+package main
+
+import "flag"
+import "github.com/gocql/gocql"
+import "fmt"
+import "text/tabwriter"
+import "bufio"
+import "os"
+
+var netaddr = flag.String("addr","127.0.0.1","network address of cassandra")
+
+var cql_session *gocql.Session
+var tw *tabwriter.Writer
+var inpt *bufio.Reader
+
+func main() {
+	tw = tabwriter.NewWriter(os.Stdout,0,0,2,' ',tabwriter.Debug)
+	inpt = bufio.NewReader(os.Stdin)
+	flag.Parse()
+	cluster := gocql.NewCluster(*netaddr)
+	session, err := cluster.CreateSession()
+	if err!=nil {
+		fmt.Println("no connection",err)
+		return
+	}
+	cql_session = session
+	repl()
+}
+
