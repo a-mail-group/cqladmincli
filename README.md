@@ -22,7 +22,7 @@ list tables <<keyspace>>
 
 ### List up columns
 ```
-list tables <<keyspace>>.<<table>>
+list columns <<keyspace>>.<<table>>
 ```
 
 ### Run CQL commands.
